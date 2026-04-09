@@ -1,3 +1,4 @@
+export * from './Botao'
 export * from './Cabecalho';
 export * from './Conteudo';
 export * from './CampoTexto';

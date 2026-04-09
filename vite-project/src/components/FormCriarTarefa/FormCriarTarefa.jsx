@@ -1,9 +1,11 @@
-import { CampoTexto } from "../CampoTexto";
+import { CampoTexto,Botao } from "../../components";
+import style from "./FormCriarTarefa.module.css";
 
 const FormCriarTarefa = () => {
     return (
-        <form>
+        <form className={style.FormCriarTarefa}>
             <CampoTexto/>
+            <Botao texto="+" />
         </form>
     );
 };
