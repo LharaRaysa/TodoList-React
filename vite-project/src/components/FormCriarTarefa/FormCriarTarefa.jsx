@@ -7,19 +7,38 @@ import style from "./FormCriarTarefa.module.css";
 const FormCriarTarefa = (props) => {
     const [nomeTarefa, setNomeTarefa] = useState('');
 
-    const { _setTarefas } = props;
+    const { setTarefas } = props;
 
     const onChangeNomeTarefa = (event) => {
         setNomeTarefa(event.currentTarget.value)
     };
 
-    const _adicionarTarefa = () => {
+    const adicionarTarefa = (event) => {
+        event.preventDefault();
+        if(!nomeTarefa){
+            return;
+        }
 
+        setTarefas(estadoAtual => {
+            const tarefa ={ 
+                id: estadoAtual.length + 1,
+                nome: nomeTarefa
+            };
+            return [
+                ...estadoAtual,
+                tarefa,
+            ];
+        });
+
+        setNomeTarefa('');
     };
 
     return (
-        <form className={style.FormCriarTarefa}>
-            <CampoTexto value={nomeTarefa} onChange={onChangeNomeTarefa}/>
+        <form className={style.FormCriarTarefa} onSubmit={adicionarTarefa}>
+            <CampoTexto 
+                value={nomeTarefa} 
+                onChange={onChangeNomeTarefa}
+                />
             <Botao texto="+" />
         </form>
     );
