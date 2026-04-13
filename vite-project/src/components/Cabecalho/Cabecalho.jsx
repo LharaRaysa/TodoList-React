@@ -4,7 +4,8 @@ import style from './Cabecalho.module.css'
 const Cabecalho = () => {
     return (
         <div className={style.Cabecalho}>
-        <Link>
+            
+        <Link to="/">
          <h1>
             <span>ToDo </span>
             List
@@ -12,6 +13,7 @@ const Cabecalho = () => {
          </Link>
 
          <Link to="/sobre-nos">Sobre Nós</Link>
+
         </div>
     );
 };
