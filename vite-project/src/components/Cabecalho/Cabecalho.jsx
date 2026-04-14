@@ -11,7 +11,6 @@ const Cabecalho = () => {
             List
          </h1>
          </Link>
-
          <Link to="/sobre-nos">Sobre Nós</Link>
 
         </div>
