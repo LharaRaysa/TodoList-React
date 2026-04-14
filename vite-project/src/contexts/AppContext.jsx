@@ -2,7 +2,17 @@ import { createContext, useEffect, useState } from "react";
 
 import { api } from '../services';
 
-export const AppContext = createContext({});
+export const AppContext = createContext({
+  criador: "",
+  tarefas: [],
+  adicionarTarefa: async () => {},
+  removerTarefa: async () => {},
+  editarTarefa: async () => {},
+  loadingCarregar: false,
+  loadingCriar: false,
+  loadingDeletar: null,
+  loadingEditar: null,
+});
 
 export const AppContextProvider = (props) => {
   const { children } = props;
@@ -11,16 +21,26 @@ export const AppContextProvider = (props) => {
 
   const [tarefas, setTarefas] = useState([]);
 
+  const [loadingCarregar, setLoadingCarregar] = useState(false);
+  const [loadingCriar, setLoadingCriar] = useState(false);
+  const [loadingDeletar, setLoadingDeletar] = useState(null);
+  const [loadingEditar, setLoadingEditar] = useState(null);
+
   const carregarTarefas = async () => {
+    setLoadingCarregar(true);
+
     const { data = [] } = await api.get('/tarefas');
 
     setTarefas([
       ...data,
     ]);
+
+    setLoadingCarregar(false);
   };
 
   const adicionarTarefa = async (nomeTarefa) => {
-    const { date: tarefa } = await api.post('/tarefas', {
+    setLoadingCriar(true);
+    const { data: tarefa } = await api.post('/tarefas', {
       nome: nomeTarefa,
     });
 
@@ -30,9 +50,13 @@ export const AppContextProvider = (props) => {
           tarefa,
       ];
     });
+
+    setLoadingCriar(false);
   };
 
   const removerTarefa = async (idTarefa) => {
+    setLoadingDeletar(idTarefa);
+
     await api.delete(`/tarefas/${idTarefa}`);
 
 
@@ -43,9 +67,13 @@ export const AppContextProvider = (props) => {
         ...tarefasAtualizadas,
       ];
     });
+
+    setLoadingDeletar(null);
   };
 
   const editarTarefa = async (idTarefa, nomeTarefa) => {
+    setLoadingEditar(idTarefa);
+    
     const { data: tarefaAtualizada } = await api.put(`/tarefas/${idTarefa}`, {
       nome: nomeTarefa,
     });
@@ -62,6 +90,9 @@ export const AppContextProvider = (props) => {
         ...tarefasAtualizadas,
       ]
     });
+
+    setLoadingEditar(null);
+
   };
 
   useEffect( () => {
@@ -76,6 +107,10 @@ export const AppContextProvider = (props) => {
         adicionarTarefa,
         removerTarefa,
         editarTarefa,
+        loadingCarregar,
+        loadingCriar,
+        loadingDeletar,
+        loadingEditar,
       }}
     >
       {children}
