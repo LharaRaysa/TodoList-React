@@ -1,16 +1,30 @@
+import { useState } from "react";
 import { useAppContext } from "../../../hooks";
-import { Botao, TIPO_BOTAO } from "../../Botao";
+import { Botao, TIPO_BOTAO, CampoTexto } from "../../../components";
 
 import style from './ListaTarefaItem.module.css';
 
 const ListaTarefaItem = (props) => {
     const { id, nome } = props;
+
+    const [ estaEditando, setEstaEditando ] = useState(false);
     
-    const { removerTarefa } = useAppContext();
+    const { editarTarefa, removerTarefa } = useAppContext();
 
     return(
         <li className={style.ListaTarefaItem}>
-        {nome}
+            {estaEditando && (
+                <CampoTexto
+                 defaulValue={nome}
+                 onChange={event => editarTarefa(id, event.currentTarget.value)}
+                 onBlur={() => setEstaEditando(false)} 
+                 autofocus
+                />
+            )}
+            { !estaEditando && (
+                <span onDoubleClick={() => setEstaEditando(true)}>{nome}</span>
+            ) }
+
         <Botao 
             texto="-"
             tipo={TIPO_BOTAO.SECUNDARIO}
