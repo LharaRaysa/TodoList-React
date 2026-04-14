@@ -5,7 +5,7 @@ export const AppContext = createContext({});
 export const AppContextProvider = (props) => {
   const { children } = props;
 
-  const [criador, _setCriador] = useState("Lhara");
+  const [criador, setCriador] = useState("Lhara");
 
   const [tarefas, setTarefas] = useState([
     {id: 1, nome: 'Item 1'},
