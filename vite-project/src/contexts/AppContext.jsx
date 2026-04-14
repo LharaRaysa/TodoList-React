@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 
 import { api } from '../services';
 
@@ -26,17 +26,15 @@ export const AppContextProvider = (props) => {
   const [loadingDeletar, setLoadingDeletar] = useState(null);
   const [loadingEditar, setLoadingEditar] = useState(null);
 
-  const carregarTarefas = async () => {
-    setLoadingCarregar(true);
+  const carregarTarefas = useCallback(async () => {
+  setLoadingCarregar(true);
 
     const { data = [] } = await api.get('/tarefas');
 
-    setTarefas([
-      ...data,
-    ]);
+    setTarefas([...data]);
 
     setLoadingCarregar(false);
-  };
+  }, []);
 
   const adicionarTarefa = async (nomeTarefa) => {
     setLoadingCriar(true);
@@ -56,9 +54,7 @@ export const AppContextProvider = (props) => {
 
   const removerTarefa = async (idTarefa) => {
     setLoadingDeletar(idTarefa);
-
     await api.delete(`/tarefas/${idTarefa}`);
-
 
     setTarefas(estadoAtual =>{
       const tarefasAtualizadas = estadoAtual.filter(tarefa => tarefa.id != idTarefa);
@@ -95,7 +91,7 @@ export const AppContextProvider = (props) => {
 
   };
 
-  useEffect( () => {
+  useEffect(() => {
     carregarTarefas();
   }, [])
 
